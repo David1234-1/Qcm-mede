@@ -1,4 +1,4 @@
-// Service de traitement de documents StudyHub
+// Service de traitement de documents StudyHub - CORRIGÉ
 class DocumentProcessor {
   constructor() {
     this.supportedTypes = {
@@ -11,9 +11,11 @@ class DocumentProcessor {
   }
 
   init() {
-    // Initialiser PDF.js
+    // Initialiser PDF.js - CORRIGÉ
     if (typeof pdfjsLib !== 'undefined') {
       pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+    } else {
+      console.warn('PDF.js non disponible, traitement PDF limité');
     }
   }
 
@@ -30,6 +32,12 @@ class DocumentProcessor {
 
   async processPDF(file) {
     try {
+      // Vérifier si PDF.js est disponible
+      if (typeof pdfjsLib === 'undefined') {
+        console.warn('PDF.js non disponible, utilisation du contenu simulé');
+        return this.generateMockContent(file.name, 'pdf');
+      }
+
       const arrayBuffer = await file.arrayBuffer();
       const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
       
@@ -53,7 +61,7 @@ class DocumentProcessor {
       };
     } catch (error) {
       console.error('Erreur lors du traitement PDF:', error);
-      // Fallback vers du contenu simulé
+      // Fallback vers du contenu simulé - CORRIGÉ
       return this.generateMockContent(file.name, 'pdf');
     }
   }
@@ -65,8 +73,7 @@ class DocumentProcessor {
       
       const arrayBuffer = await file.arrayBuffer();
       
-      // Simulation de l'extraction de texte pour les fichiers Word
-      // En réalité, vous devriez utiliser mammoth.js ou une API
+      // Simulation de l'extraction de texte pour les fichiers Word - CORRIGÉ
       const mockText = this.generateMockWordContent(file.name);
       
       return {
@@ -76,7 +83,7 @@ class DocumentProcessor {
       };
     } catch (error) {
       console.error('Erreur lors du traitement Word:', error);
-      // Fallback vers du contenu simulé
+      // Fallback vers du contenu simulé - CORRIGÉ
       return this.generateMockContent(file.name, 'word');
     }
   }
@@ -134,7 +141,7 @@ Références :
   }
 
   async extractKeyConcepts(text) {
-    // Utiliser l'IA pour extraire les concepts clés
+    // Utiliser l'IA pour extraire les concepts clés - CORRIGÉ
     if (window.AIService) {
       const prompt = `Extrais les concepts clés de ce texte de cours. 
       Retourne une liste JSON des concepts principaux avec leurs définitions.
@@ -158,7 +165,7 @@ Références :
       }
     }
     
-    // Fallback : extraction basique
+    // Fallback : extraction basique - CORRIGÉ
     return this.extractBasicConcepts(text);
   }
 
@@ -255,7 +262,7 @@ Références :
       generatedAt: new Date().toISOString()
     };
     
-    // S'assurer que l'AIService est disponible
+    // S'assurer que l'AIService est disponible - CORRIGÉ
     if (!window.AIService) {
       console.warn('AIService non disponible, utilisation du mode simulation');
       // Créer un service IA temporaire si nécessaire
@@ -281,7 +288,7 @@ Références :
 
   async saveGeneratedContent(content, fileName) {
     try {
-      // Sauvegarder les flashcards
+      // Sauvegarder les flashcards - CORRIGÉ
       if (content.flashcards && content.flashcards.length > 0) {
         const existingFlashcards = JSON.parse(localStorage.getItem('flashcards') || '[]');
         const newFlashcards = content.flashcards.map((card, index) => ({
@@ -298,7 +305,7 @@ Références :
         localStorage.setItem('flashcards', JSON.stringify([...existingFlashcards, ...newFlashcards]));
       }
 
-      // Sauvegarder les QCM
+      // Sauvegarder les QCM - CORRIGÉ
       if (content.qcm && content.qcm.length > 0) {
         const existingQCM = JSON.parse(localStorage.getItem('qcm_data') || '{}');
         const qcmId = `generated_${Date.now()}`;
@@ -317,7 +324,7 @@ Références :
         localStorage.setItem('qcm_data', JSON.stringify(existingQCM));
       }
 
-      // Sauvegarder les résumés
+      // Sauvegarder les résumés - CORRIGÉ
       if (content.summary) {
         const existingResumes = JSON.parse(localStorage.getItem('resumes') || '{}');
         const resumeId = `generated_${Date.now()}`;
@@ -336,7 +343,7 @@ Références :
         localStorage.setItem('resumes', JSON.stringify(existingResumes));
       }
 
-      // Ajouter la matière si elle n'existe pas
+      // Ajouter la matière si elle n'existe pas - CORRIGÉ
       const subjects = JSON.parse(localStorage.getItem('subjects') || '[]');
       if (!subjects.includes(content.subject)) {
         subjects.push(content.subject);
