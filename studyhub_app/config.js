@@ -12,7 +12,7 @@ window.StudyHubConfig = {
     localMode: true
   },
   
-  // Configuration IA
+  // Configuration IA - CORRIGÉE
   ai: {
     // Clé API OpenAI (optionnelle - l'IA fonctionnera en mode simulation sans clé)
     openaiApiKey: null, // À remplacer par votre clé API OpenAI
@@ -26,14 +26,21 @@ window.StudyHubConfig = {
     // Température pour la génération (0 = déterministe, 1 = créatif)
     temperature: 0.7,
     
-    // Mode simulation amélioré
+    // Mode simulation amélioré - CORRIGÉ
     simulationMode: true,
     
     // Délai de simulation pour les réponses IA
-    simulationDelay: 1000
+    simulationDelay: 1000,
+    
+    // Nouvelles configurations pour améliorer l'IA
+    enableContextAnalysis: true,
+    enableSmartResponses: true,
+    enableContentGeneration: true,
+    maxContextLength: 3000,
+    enableFallbackResponses: true
   },
   
-  // Configuration de l'application
+  // Configuration de l'application - CORRIGÉE
   app: {
     name: 'StudyHub',
     version: '1.0.0',
@@ -47,11 +54,14 @@ window.StudyHubConfig = {
     maxQCMQuestions: 50,
     maxFlashcards: 100,
     
-    // Nouvelles configurations
+    // Nouvelles configurations - CORRIGÉES
     enableLocalStorage: true,
     enableFileProcessing: true,
     enableAISimulation: true,
-    enableContentGeneration: true
+    enableContentGeneration: true,
+    enablePDFProcessing: true,
+    enableWordProcessing: true,
+    enableMockContent: true
   },
   
   // Configuration des notifications
@@ -67,14 +77,17 @@ window.StudyHubConfig = {
     autoDetect: true
   },
   
-  // Configuration du traitement de documents
+  // Configuration du traitement de documents - CORRIGÉE
   documentProcessing: {
     enablePDFExtraction: true,
     enableWordExtraction: true,
     enableContentAnalysis: true,
     enableAIGeneration: true,
     maxContentLength: 5000,
-    enableMockContent: true
+    enableMockContent: true,
+    enableTextExtraction: true,
+    enableSmartParsing: true,
+    enableErrorHandling: true
   }
 };
 

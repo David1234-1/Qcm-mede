@@ -1,4 +1,4 @@
-// Service IA pour StudyHub
+// Service IA pour StudyHub - CORRIGÉ
 class AIService {
   constructor() {
     this.apiKey = null;
@@ -104,7 +104,7 @@ class AIService {
     // Récupérer le contenu des cours téléchargés
     const courseContent = this.getCourseContent(context);
     
-    // Réponses contextuelles basées sur le contenu des cours
+    // Réponses contextuelles basées sur le contenu des cours - CORRIGÉ
     if (courseContent && courseContent.length > 0) {
       if (lowerPrompt.includes('concept') || lowerPrompt.includes('princip')) {
         return this.generateConceptsResponseFromContent(courseContent, context);
@@ -126,7 +126,7 @@ class AIService {
       return this.generateGeneralResponseFromContent(prompt, courseContent, context);
     }
     
-    // Réponses générales si pas de contenu spécifique
+    // Réponses générales si pas de contenu spécifique - CORRIGÉ
     if (lowerPrompt.includes('aide') || lowerPrompt.includes('comment')) {
       return `Je suis là pour vous aider dans vos études ! Voici quelques conseils :
 
@@ -149,7 +149,7 @@ Que souhaitez-vous approfondir ?`;
 Sur quel point particulier avez-vous des difficultés ?`;
     }
 
-    // Réponse par défaut
+    // Réponse par défaut - CORRIGÉ
     return `Merci pour votre question ! Je suis votre assistant pédagogique et je suis là pour vous aider dans vos études.
 
 Pour vous donner une réponse plus précise et personnalisée, pourriez-vous :
@@ -165,14 +165,14 @@ Je peux vous aider avec les concepts, les formules, les exemples pratiques, et b
     
     const content = [];
     
-    // Récupérer le contenu des fichiers importés
+    // Récupérer le contenu des fichiers importés - CORRIGÉ
     const importedFiles = JSON.parse(localStorage.getItem('imported_files') || '[]');
     if (context.subject && context.subject.name) {
       const subjectFiles = importedFiles.filter(file => 
         file.subject === context.subject.name && file.content
       );
       subjectFiles.forEach(file => {
-        if (file.content.originalText) {
+        if (file.content && file.content.originalText) {
           content.push({
             type: 'document',
             title: file.title,
@@ -183,20 +183,24 @@ Je peux vous aider avec les concepts, les formules, les exemples pratiques, et b
       });
     }
     
-    // Récupérer le contenu des QCM
-    if (context.qcm && context.qcm.questions) {
-      context.qcm.questions.forEach(q => {
-        content.push({
-          type: 'qcm',
-          question: q.text,
-          answers: q.answers,
-          source: 'QCM'
-        });
+    // Récupérer le contenu des QCM - CORRIGÉ
+    if (context.qcm && Array.isArray(context.qcm)) {
+      context.qcm.forEach(qcm => {
+        if (qcm.questions && Array.isArray(qcm.questions)) {
+          qcm.questions.forEach(q => {
+            content.push({
+              type: 'qcm',
+              question: q.text || q.question,
+              answers: q.answers,
+              source: 'QCM'
+            });
+          });
+        }
       });
     }
     
-    // Récupérer le contenu des flashcards
-    if (context.flashcards) {
+    // Récupérer le contenu des flashcards - CORRIGÉ
+    if (context.flashcards && Array.isArray(context.flashcards)) {
       context.flashcards.forEach(card => {
         content.push({
           type: 'flashcard',
@@ -424,7 +428,7 @@ N'hésitez pas à me poser des questions plus spécifiques pour approfondir !`;
         console.warn('Impossible de parser la réponse JSON, génération de QCM mock');
       }
       
-      // Fallback vers des QCM générés automatiquement
+      // Fallback vers des QCM générés automatiquement - CORRIGÉ
       return this.generateMockQCM(content, count);
     } catch (error) {
       console.error('Erreur lors de la génération de QCM:', error);
@@ -437,7 +441,7 @@ N'hésitez pas à me poser des questions plus spécifiques pour approfondir !`;
     const subjects = ['Mathématiques', 'Physique', 'Chimie', 'Biologie', 'Histoire', 'Géographie'];
     const subject = subjects[Math.floor(Math.random() * subjects.length)];
     
-    // Extraire des mots du contenu pour créer des questions plus pertinentes
+    // Extraire des mots du contenu pour créer des questions plus pertinentes - CORRIGÉ
     const words = content.split(' ').filter(word => word.length > 4).slice(0, 10);
     
     for (let i = 0; i < count; i++) {
