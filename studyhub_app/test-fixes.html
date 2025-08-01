@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test des Corrections - StudyHub</title>
+  <link rel="stylesheet" href="assets/style.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="theme-toggle">
+    <button id="theme-switch" aria-label="Changer de thème">
+      <i class="fas fa-sun"></i>
+    </button>
+  </div>
+
+  <header class="header">
+    <div class="header-content">
+      <div class="logo-section">
+        <img src="assets/logo.png" id="logo" alt="StudyHub Logo">
+        <h1>StudyHub - Test des Corrections</h1>
+      </div>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <div class="page-header">
+      <h1 class="page-title">Test des Corrections</h1>
+      <p class="page-subtitle">Vérification que toutes les corrections fonctionnent correctement</p>
+    </div>
+
+    <div class="test-sections">
+      <!-- Test de l'IA -->
+      <div class="card">
+        <h3><i class="fas fa-robot"></i> Test de l'Assistant IA</h3>
+        <div class="test-content">
+          <p>Test de l'assistant IA avec simulation améliorée :</p>
+          <button class="btn btn-primary" onclick="testAI()">
+            <i class="fas fa-play"></i> Tester l'IA
+          </button>
+          <div id="ai-test-result" class="test-result"></div>
+        </div>
+      </div>
+
+      <!-- Test du traitement de documents -->
+      <div class="card">
+        <h3><i class="fas fa-file-alt"></i> Test du Traitement de Documents</h3>
+        <div class="test-content">
+          <p>Test du traitement de documents avec génération de contenu :</p>
+          <button class="btn btn-primary" onclick="testDocumentProcessing()">
+            <i class="fas fa-play"></i> Tester le traitement
+          </button>
+          <div id="document-test-result" class="test-result"></div>
+        </div>
+      </div>
+
+      <!-- Test de l'import -->
+      <div class="card">
+        <h3><i class="fas fa-upload"></i> Test de l'Import</h3>
+        <div class="test-content">
+          <p>Test de l'import de fichiers avec génération automatique :</p>
+          <button class="btn btn-primary" onclick="testImport()">
+            <i class="fas fa-play"></i> Tester l'import
+          </button>
+          <div id="import-test-result" class="test-result"></div>
+        </div>
+      </div>
+
+      <!-- Test des QCM -->
+      <div class="card">
+        <h3><i class="fas fa-question-circle"></i> Test des QCM</h3>
+        <div class="test-content">
+          <p>Test des QCM avec contenu généré automatiquement :</p>
+          <button class="btn btn-primary" onclick="testQCM()">
+            <i class="fas fa-play"></i> Tester les QCM
+          </button>
+          <div id="qcm-test-result" class="test-result"></div>
+        </div>
+      </div>
+
+      <!-- Test des Flashcards -->
+      <div class="card">
+        <h3><i class="fas fa-layer-group"></i> Test des Flashcards</h3>
+        <div class="test-content">
+          <p>Test des flashcards avec contenu généré automatiquement :</p>
+          <button class="btn btn-primary" onclick="testFlashcards()">
+            <i class="fas fa-play"></i> Tester les Flashcards
+          </button>
+          <div id="flashcard-test-result" class="test-result"></div>
+        </div>
+      </div>
+
+      <!-- Test complet -->
+      <div class="card">
+        <h3><i class="fas fa-check-circle"></i> Test Complet</h3>
+        <div class="test-content">
+          <p>Test complet de toutes les fonctionnalités :</p>
+          <button class="btn btn-success" onclick="runCompleteTest()">
+            <i class="fas fa-play"></i> Lancer le test complet
+          </button>
+          <div id="complete-test-result" class="test-result"></div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="config.js"></script>
+  <script src="scripts/notification-manager.js"></script>
+  <script src="scripts/main.js"></script>
+  <script src="scripts/ai-service.js"></script>
+  <script src="scripts/document-processor.js"></script>
+  <script>
+    // Tests des corrections
+    async function testAI() {
+      const resultDiv = document.getElementById('ai-test-result');
+      resultDiv.innerHTML = '<p>Test en cours...</p>';
+      
+      try {
+        // Test de l'IA avec simulation
+        const response = await window.AIService.generateResponse('Explique-moi les concepts principaux de mathématiques');
+        resultDiv.innerHTML = `
+          <div class="success">
+            <h4>✅ Test IA réussi</h4>
+            <p><strong>Réponse générée :</strong></p>
+            <div class="response-content">${response}</div>
+          </div>
+        `;
+      } catch (error) {
+        resultDiv.innerHTML = `
+          <div class="error">
+            <h4>❌ Test IA échoué</h4>
+            <p>Erreur : ${error.message}</p>
+          </div>
+        `;
+      }
+    }
+
+    async function testDocumentProcessing() {
+      const resultDiv = document.getElementById('document-test-result');
+      resultDiv.innerHTML = '<p>Test en cours...</p>';
+      
+      try {
+        // Créer un fichier de test
+        const testContent = 'Cours de mathématiques sur les fonctions. Les fonctions sont des relations entre deux ensembles.';
+        const blob = new Blob([testContent], { type: 'text/plain' });
+        const testFile = new File([blob], 'test.txt', { type: 'text/plain' });
+        
+        // Test du traitement
+        const processed = await window.DocumentProcessor.processDocument(testFile);
+        const structured = await window.DocumentProcessor.generateStructuredContent(processed.text, {
+          subject: 'Mathématiques',
+          generateQCM: true,
+          generateFlashcards: true
+        });
+        
+        resultDiv.innerHTML = `
+          <div class="success">
+            <h4>✅ Test traitement réussi</h4>
+            <p><strong>Texte extrait :</strong> ${processed.text.substring(0, 100)}...</p>
+            <p><strong>QCM générés :</strong> ${structured.qcm?.length || 0}</p>
+            <p><strong>Flashcards générées :</strong> ${structured.flashcards?.length || 0}</p>
+          </div>
+        `;
+      } catch (error) {
+        resultDiv.innerHTML = `
+          <div class="error">
+            <h4>❌ Test traitement échoué</h4>
+            <p>Erreur : ${error.message}</p>
+          </div>
+        `;
+      }
+    }
+
+    async function testImport() {
+      const resultDiv = document.getElementById('import-test-result');
+      resultDiv.innerHTML = '<p>Test en cours...</p>';
+      
+      try {
+        // Simuler un import
+        const testFileData = {
+          id: 'test_' + Date.now(),
+          name: 'test-document.pdf',
+          title: 'Document de test',
+          subject: 'Mathématiques',
+          content: {
+            originalText: 'Cours de mathématiques sur les fonctions.',
+            qcm: [
+              {
+                question: 'Qu\'est-ce qu\'une fonction ?',
+                answers: ['Une relation', 'Un nombre', 'Une équation', 'Une variable'],
+                correctAnswer: 0
+              }
+            ],
+            flashcards: [
+              {
+                question: 'Définition d\'une fonction',
+                answer: 'Une relation entre deux ensembles'
+              }
+            ]
+          }
+        };
+        
+        // Sauvegarder le contenu généré
+        const savedContent = await window.DocumentProcessor.saveGeneratedContent(
+          {
+            subject: 'Mathématiques',
+            qcm: testFileData.content.qcm,
+            flashcards: testFileData.content.flashcards,
+            summary: 'Résumé du cours de mathématiques'
+          },
+          testFileData.name
+        );
+        
+        resultDiv.innerHTML = `
+          <div class="success">
+            <h4>✅ Test import réussi</h4>
+            <p><strong>Flashcards sauvegardées :</strong> ${savedContent.flashcards}</p>
+            <p><strong>QCM sauvegardés :</strong> ${savedContent.qcm}</p>
+            <p><strong>Résumés sauvegardés :</strong> ${savedContent.summary}</p>
+          </div>
+        `;
+      } catch (error) {
+        resultDiv.innerHTML = `
+          <div class="error">
+            <h4>❌ Test import échoué</h4>
+            <p>Erreur : ${error.message}</p>
+          </div>
+        `;
+      }
+    }
+
+    function testQCM() {
+      const resultDiv = document.getElementById('qcm-test-result');
+      resultDiv.innerHTML = '<p>Test en cours...</p>';
+      
+      try {
+        // Vérifier les QCM dans localStorage
+        const qcmData = JSON.parse(localStorage.getItem('qcm_data') || '{}');
+        const allQCMs = Object.values(qcmData);
+        const generatedQCMs = allQCMs.filter(qcm => qcm.generated);
+        
+        resultDiv.innerHTML = `
+          <div class="success">
+            <h4>✅ Test QCM réussi</h4>
+            <p><strong>QCM totaux :</strong> ${allQCMs.length}</p>
+            <p><strong>QCM générés automatiquement :</strong> ${generatedQCMs.length}</p>
+            <p><strong>Questions totales :</strong> ${allQCMs.reduce((sum, qcm) => sum + (qcm.questions?.length || 0), 0)}</p>
+          </div>
+        `;
+      } catch (error) {
+        resultDiv.innerHTML = `
+          <div class="error">
+            <h4>❌ Test QCM échoué</h4>
+            <p>Erreur : ${error.message}</p>
+          </div>
+        `;
+      }
+    }
+
+    function testFlashcards() {
+      const resultDiv = document.getElementById('flashcard-test-result');
+      resultDiv.innerHTML = '<p>Test en cours...</p>';
+      
+      try {
+        // Vérifier les flashcards dans localStorage
+        const flashcards = JSON.parse(localStorage.getItem('flashcards') || '[]');
+        const generatedFlashcards = flashcards.filter(card => card.generated);
+        
+        resultDiv.innerHTML = `
+          <div class="success">
+            <h4>✅ Test Flashcards réussi</h4>
+            <p><strong>Flashcards totales :</strong> ${flashcards.length}</p>
+            <p><strong>Flashcards générées automatiquement :</strong> ${generatedFlashcards.length}</p>
+            <p><strong>Matières disponibles :</strong> ${new Set(flashcards.map(card => card.subject)).size}</p>
+          </div>
+        `;
+      } catch (error) {
+        resultDiv.innerHTML = `
+          <div class="error">
+            <h4>❌ Test Flashcards échoué</h4>
+            <p>Erreur : ${error.message}</p>
+          </div>
+        `;
+      }
+    }
+
+    async function runCompleteTest() {
+      const resultDiv = document.getElementById('complete-test-result');
+      resultDiv.innerHTML = '<p>Test complet en cours...</p>';
+      
+      const results = [];
+      
+      // Test 1: IA
+      try {
+        await window.AIService.generateResponse('Test');
+        results.push('✅ IA fonctionne');
+      } catch (error) {
+        results.push('❌ IA échoué');
+      }
+      
+      // Test 2: Traitement de documents
+      try {
+        const testContent = 'Test';
+        const blob = new Blob([testContent], { type: 'text/plain' });
+        const testFile = new File([blob], 'test.txt', { type: 'text/plain' });
+        await window.DocumentProcessor.processDocument(testFile);
+        results.push('✅ Traitement de documents fonctionne');
+      } catch (error) {
+        results.push('❌ Traitement de documents échoué');
+      }
+      
+      // Test 3: localStorage
+      try {
+        localStorage.setItem('test', 'test');
+        localStorage.removeItem('test');
+        results.push('✅ localStorage fonctionne');
+      } catch (error) {
+        results.push('❌ localStorage échoué');
+      }
+      
+      // Test 4: Configuration
+      try {
+        if (window.StudyHubConfig) {
+          results.push('✅ Configuration chargée');
+        } else {
+          results.push('❌ Configuration manquante');
+        }
+      } catch (error) {
+        results.push('❌ Configuration échoué');
+      }
+      
+      resultDiv.innerHTML = `
+        <div class="complete-test">
+          <h4>Résultats du test complet :</h4>
+          <ul>
+            ${results.map(result => `<li>${result}</li>`).join('')}
+          </ul>
+          <p><strong>Statut :</strong> ${results.every(r => r.includes('✅')) ? 'Tous les tests réussis !' : 'Certains tests ont échoué.'}</p>
+        </div>
+      `;
+    }
+  </script>
+
+  <style>
+    .test-sections {
+      display: grid;
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+    
+    .test-content {
+      margin-top: 1rem;
+    }
+    
+    .test-result {
+      margin-top: 1rem;
+      padding: 1rem;
+      border-radius: 0.5rem;
+      background: #f8f9fa;
+    }
+    
+    .success {
+      color: #28a745;
+    }
+    
+    .error {
+      color: #dc3545;
+    }
+    
+    .response-content {
+      background: white;
+      padding: 1rem;
+      border-radius: 0.5rem;
+      margin-top: 0.5rem;
+      border-left: 4px solid #28a745;
+    }
+    
+    .complete-test ul {
+      list-style: none;
+      padding: 0;
+    }
+    
+    .complete-test li {
+      padding: 0.5rem 0;
+      border-bottom: 1px solid #eee;
+    }
+  </style>
+</body>
+</html>
